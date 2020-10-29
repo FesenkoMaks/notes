@@ -3,41 +3,96 @@ function intervalConstruction(arr) {
     let startingNote = arr[1];
     let up = arr[2] ? arr[2] : 'asc';
     let interval = ['м2', 'M2', 'м3', 'M3', 'P4', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8']
-    let notes = ['C','semitone','semitone','D','semitone','semitone','E','semitone','F','semitone','semitone', 'G', "semitone", "semitone", 'A', "semitone", "semitone", 'B', "semitone", "C"]
+    let notes;
+    if (up === "asc"){notes = ['Cb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'E#', 'Fb', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B', 'B#']}
+    else {notes = ['Cb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'E#', 'Fb', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B', 'B#'].reverse()}
+    console.log(notes)
+    let clearNotes = notes.filter((arg) => arg.length === 1)
+    console.log(clearNotes)
+    let indexStartingNote = clearNotes.findIndex((arg) => arg === startingNote[0])
+    console.log(indexStartingNote)
+    let intervalCount = +intervalName[1]
+    console.log(intervalCount)
+    let semitoneNumber = interval.findIndex(arg => arg === intervalName) + 1 + (startingNote[1] === 'b' ? + 1 : 0) - (startingNote[1] === '#' ? - 1 : 0)
+    console.log(semitoneNumber)
+    let searchNoteIndex = indexStartingNote+intervalCount - 1 - (indexStartingNote+ intervalCount > clearNotes.length? clearNotes.length : 0)
+    let searchNote = clearNotes[searchNoteIndex]
+    let start = notes.findIndex((arg) => arg === startingNote)
+    let finish = notes.findIndex((arg) => arg === searchNote)
 
-    if (arr.length < 2 || arr.length > 3){
-        console.log("Illegal number of elements in input array")
+    console.log(searchNote)
+    let three;
+    if (finish < start) {
+        let one = notes.slice(start, notes.length)
+        console.log("one:"+ one)
+        let two = notes.slice(0, finish)
+        console.log("two:"+ two)
+        three = one.concat(two).filter((arg)=> arg.length === 1 || arg === startingNote)
     } else {
-        let semitoneNumber = interval.findIndex((arg) => arg === intervalName) + 1
-        console.log(semitoneNumber)
-        let arrayNotes = notes.filter((a) => a.length === 1)
-        console.log(arrayNotes)
-        let indexStartingNote = arrayNotes.findIndex((arg) => arg === startingNote)
-        console.log(indexStartingNote)
-        let rr = +intervalName[1]
-        console.log(rr)
-        let searchNote = arrayNotes.find((arg, i) => i === indexStartingNote + rr - 1)
-        console.log(searchNote)
-        let aa = notes.findIndex((arg) => arg === startingNote)
-        console.log(aa)
-        let bb = notes.findIndex((arg) => arg === searchNote)
-        console.log(bb)
-        switch (aa + semitoneNumber - rr) {
-            case -2: console.log(searchNote+"bb")
-                break
-            case -1: console.log(searchNote+"b")
-                break
-            case 0: console.log(searchNote)
-                break
-            case 1: console.log(searchNote+"#")
-                break
-            case 2: console.log(searchNote+"##")
-                break
+        three = notes.slice(start, finish).filter((arg)=> arg.length === 1 || arg === startingNote)
+    }
+    console.log(three)
+    let semitone = {
+        'C': 2,
+        'D': 2,
+        'E': 1,
+        'F': 2,
+        'G': 2,
+        'A': 2,
+        'B': 1,
+        'Cb': 1,
+        'C#': 1,
+        'Db': 1,
+        'D#': 1,
+        'Eb': 1,
+        'E#': 1,
+        'Fb': 1,
+        'F#': 1,
+        'Gb': 1,
+        'G#': 1,
+        'Ab': 1,
+        'A#': 1,
+        'Bb': 1,
+        'B#': 1,
+
+    }
+    let semitoneSum = 0
+
+    for (let i = 0; i < three.length; i++){
+        for (key in semitone){
+            if (key === three[i]){
+                semitoneSum += semitone[key]
+            }
         }
     }
-}
+    console.log(semitoneNumber - semitoneSum)
 
-intervalConstruction(['P5', 'D', 'asc'])
+    switch (semitoneNumber - semitoneSum) {
+        case -2: {
+            console.log( searchNote+ 'bb');
+            break;
+        }
+        case -1: {
+            console.log( searchNote+ 'b');
+            break;
+        }
+        case 0: {
+            console.log( searchNote);
+            break;
+        }
+        case 1: {
+            console.log( searchNote+ '#');
+            break;
+        }
+        case 2: {
+            console.log( searchNote+ '##');
+            break;
+        }
+    }
+
+}
+console.log(['M3', 'Cb', 'dsc'])
+intervalConstruction( ['M3', 'Cb', 'dsc'])
 // ["C", "D", "E", "F", "G", "A", "B"]
 // Требования:
 //     intervalConstruction
